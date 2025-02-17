@@ -21,12 +21,15 @@ git clone https://github.com/GergoHalasz/Company.git
 #### 1.2 Restore the NuGet Packages
 
 Before running the project, restore the required NuGet packages:
+
 dotnet restore
 
 #### 1.3 Apply Migrations
 
 Once the project is restored, apply the database migrations to update the database schema:
+
 dotnet ef database update
+
 It adds also automatically the SQL records provided in the task.
 
 #### 1.4 Run the API Server
