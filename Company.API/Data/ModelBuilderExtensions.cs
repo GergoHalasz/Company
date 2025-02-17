@@ -4,8 +4,8 @@ public static class ModelBuilderExtensions
 {
 	public static ModelBuilder Seed(this ModelBuilder modelBuilder)
 	{
-		modelBuilder.Entity<Models.Company>().HasData(
-		new Models.Company
+		modelBuilder.Entity<Models.CompanyEntity>().HasData(
+		new Models.CompanyEntity
 		{
 			Id = 1,
 			Name = "Apple Inc.",
@@ -14,7 +14,7 @@ public static class ModelBuilderExtensions
 			ISIN = "US0378331005",
 			WebsiteUrl = "http://www.apple.com",
 		},
-		new Models.Company
+		new Models.CompanyEntity
 		{
 			Id = 2,
 			Name = "British Airways Plc",
@@ -22,7 +22,7 @@ public static class ModelBuilderExtensions
 			Ticker = "BAIRY",
 			ISIN = "US1104193065",
 		},
-		new Models.Company
+		new Models.CompanyEntity
 		{
 			Id = 3,
 			Name = "Heineken NV",
@@ -30,7 +30,7 @@ public static class ModelBuilderExtensions
 			Ticker = "HEIA",
 			ISIN = "NL0000009165",
 		},
-		new Models.Company
+		new Models.CompanyEntity
 		{
 			Id = 4,
 			Name = "Panasonic Corp",
@@ -39,7 +39,7 @@ public static class ModelBuilderExtensions
 			ISIN = "JP3866800000",
 			WebsiteUrl = "http://www.panasonic.co.jp",
 		},
-		new Models.Company
+		new Models.CompanyEntity
 		{
 			Id = 5,
 			Name = "Porsche Automobil",

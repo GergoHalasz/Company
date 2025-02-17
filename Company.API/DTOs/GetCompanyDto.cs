@@ -1,6 +1,6 @@
-﻿namespace Company.API.Models
+﻿namespace Company.API.DTOs
 {
-	public class Company
+	public class GetCompanyDto
 	{
 		public int Id { get; set; }
 		public required string Name { get; set; }

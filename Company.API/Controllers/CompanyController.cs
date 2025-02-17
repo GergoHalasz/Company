@@ -1,67 +1,67 @@
-﻿using Company.API.Data;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Company.API.DTOs;
+using Company.API.Services;
+using Microsoft.AspNetCore.Authorization;
 
-namespace Company.API.Controllers
+namespace Company.API.Controllers;
+
+[ApiController]
+[Route("api/companies")]
+public class CompanyController : ControllerBase
 {
-	[ApiController]
-	[Route("api/[controller]")]
-	public class CompanyController(AppDbContext context) : ControllerBase
+	private readonly ICompanyService _service;
+
+	public CompanyController(ICompanyService service)
 	{
-		private readonly AppDbContext _context = context;
+		_service = service;
+	}
 
-		[HttpPost]
-		public async Task<IActionResult> Create([FromBody] Models.Company company)
+	[HttpGet]
+	[Authorize]
+	public async Task<IActionResult> GetAll()
+	{
+		var companies = await _service.GetAllAsync();
+		return Ok(companies);
+	}
+
+	[HttpGet("{id}")]
+	[Authorize]
+	public async Task<IActionResult> GetById(int id)
+	{
+		var company = await _service.GetByIdAsync(id);
+		return company == null ? NotFound() : Ok(company);
+	}
+
+	[HttpGet("isin/{isin}")]
+	[Authorize]
+	public async Task<IActionResult> GetByIsin(string isin)
+	{
+		var company = await _service.GetByIsinAsync(isin);
+		return company == null ? NotFound() : Ok(company);
+	}
+
+	[HttpPost]
+	[Authorize]
+	public async Task<IActionResult> Create([FromBody] CompanyDto companyDto)
+	{
+		var (success, errorMessage, createdCompany) = await _service.CreateAsync(companyDto);
+
+		if (!success)
 		{
-			if (!company.ISIN[..2].All(char.IsLetter))
-			{
-				return BadRequest("ISIN must start with two letters.");
-			}
-
-			if (await _context.Companies.AnyAsync(c => c.ISIN == company.ISIN))
-			{
-				return BadRequest("Company with this ISIN already exists.");
-			}
-
-			_context.Companies.Add(company);
-			await _context.SaveChangesAsync();
-			return CreatedAtAction(nameof(GetById), new { id = company.Id }, company);
+			return BadRequest(errorMessage);
 		}
 
-		[HttpGet("{id}")]
-		public async Task<IActionResult> GetById(int id)
-		{
-			var company = await _context.Companies.FindAsync(id);
-			return company == null ? NotFound() : Ok(company);
-		}
+		return CreatedAtAction(
+		nameof(GetById),
+		new { id = createdCompany!.Id },
+		createdCompany);
+	}
 
-		[HttpGet("isin/{isin}")]
-		public async Task<IActionResult> GetByIsin(string isin)
-		{
-			var company = await _context.Companies.FirstOrDefaultAsync(c => c.ISIN == isin);
-			return company == null ? NotFound() : Ok(company);
-		}
-
-		[HttpGet]
-		public async Task<IActionResult> GetAll()
-		{
-			return Ok(await _context.Companies.ToListAsync());
-		}
-
-		[HttpPut("{id}")]	
-		public async Task<IActionResult> Update(int id, [FromBody] Models.Company updatedCompany)
-		{
-			var company = await _context.Companies.FindAsync(id);
-			if (company == null) return NotFound();
-
-			company.Name = updatedCompany.Name;
-			company.Exchange = updatedCompany.Exchange;
-			company.Ticker = updatedCompany.Ticker;
-			company.ISIN = updatedCompany.ISIN;
-			company.WebsiteUrl = updatedCompany.WebsiteUrl;
-
-			await _context.SaveChangesAsync();
-			return NoContent();
-		}
+	[HttpPut("{id}")]
+	[Authorize]
+	public async Task<IActionResult> Update(int id, [FromBody] CompanyDto updatedCompanyDto)
+	{
+		var success = await _service.UpdateAsync(id, updatedCompanyDto);
+		return success ? NoContent() : NotFound();
 	}
 }
