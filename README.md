@@ -3,9 +3,6 @@
 This project consists of two parts:
 - **Server-side (Backend)**: Built using **.NET Core (ASP.NET Core)** for managing the API, authentication, and business logic.
 - **Client-side (Frontend)**: Built using **React** for the user interface, interacting with the backend API.
-
-Hosts: Back-end: https://localhost:7185
-       Front-end: http://localhost:51776
        
 ## Steps to Set Up and Run the Project
 
@@ -34,15 +31,18 @@ It adds also automatically the SQL records provided in the task.
 
 #### 1.4 Run the API Server
 
-Now you can start the .NET Core API server.
+Now you can start the .NET Core API server. host: https://localhost:7185
 
 ### 2. Authentication and Testing APIs
 #### 2.1 Get JWT Token
+
 Open the Swagger UI for your API by opening simply the https://localhost:7185
 Go to the /api/auth/login endpoint.
 In the "Try it out" section, provide the necessary credentials username:'testUser', password:'testPassword'
 Click the Execute button to receive the JWT token.
 Copy the generated JWT token for use in Postman.
+
+
 2.2 Test APIs Using Postman
 Open Postman and create a new request.
 In the request settings, set the Authorization type to Bearer Token.
@@ -56,13 +56,16 @@ Unit tests can be checked at Company.Tests
 ### 3. Client-Side Setup
 #### 3.1 Install Dependencies
 Navigate to the Client directory:
+
 cd Company/clientapp
+
 Install the necessary npm packages:
+
 npm install
 #### 3.2 Start the React Development Server
 Once the packages are installed, run the React app:
 npm run dev
 
-Now you can see the records fetched in browser as it automatically gets jwt token(doesn't require login).
+Now you can see the records fetched in browser as it automatically gets jwt token(doesn't require login). host: http://localhost:51776
 
 
