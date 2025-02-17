@@ -94,11 +94,12 @@ namespace Company.Tests
 		{
 			var companyDto = new CompanyDto { Name = "New Company", ISIN = "US123456789", Exchange = "Test Stock", Ticker = "TEST" };
 			var companyEntity = new CompanyEntity { Name = "New Company", ISIN = "US123456789", Exchange = "Test Stock", Ticker = "TEST" };
+			var returnsCompanyDto = new GetCompanyDto { Name = "New Company", ISIN = "US123456789", Exchange = "Test Stock", Ticker = "TEST" };
 
 			_mockRepository.Setup(r => r.ExistsByIsinAsync(It.IsAny<string>())).ReturnsAsync(false);
 			_mockMapper.Setup(m => m.Map<CompanyEntity>(companyDto)).Returns(companyEntity);
 			_mockRepository.Setup(r => r.AddAsync(companyEntity)).Returns(Task.CompletedTask);
-			_mockMapper.Setup(m => m.Map<CompanyDto>(companyEntity)).Returns(companyDto);
+			_mockMapper.Setup(m => m.Map<GetCompanyDto>(companyEntity)).Returns(returnsCompanyDto);
 
 			var result = await _companyService.CreateAsync(companyDto);
 
